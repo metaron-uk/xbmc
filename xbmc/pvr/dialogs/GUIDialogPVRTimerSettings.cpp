@@ -729,7 +729,8 @@ void CGUIDialogPVRTimerSettings::InitializeTypesList()
     return;
   }
 
-  int idx = 0;
+  bool foundThisType(false);
+  int idx(0);
   const std::vector<CPVRTimerTypePtr> types(CPVRTimerType::GetAllTypes());
   for (const auto &type : types)
   {
@@ -763,8 +764,13 @@ void CGUIDialogPVRTimerSettings::InitializeTypesList()
     if (!type->IsTimerRule() && m_timerInfoTag->EndAsLocalTime() < CDateTime::GetCurrentDateTime())
       continue;
 
+    if (type == m_timerType)
+      foundThisType = true;
+
     m_typeEntries.insert(std::make_pair(idx++, type));
   }
+  if (!foundThisType)
+    m_typeEntries.insert(std::make_pair(idx++, m_timerType));
 }
 
 void CGUIDialogPVRTimerSettings::InitializeChannelsList()
